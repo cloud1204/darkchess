@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "xlocale": "cpp",
+        "iostream": "cpp",
+        "map": "cpp",
+        "xstring": "cpp",
+        "vector": "cpp",
+        "xtree": "cpp",
+        "queue": "cpp"
+    }
+}
