@@ -141,10 +141,30 @@ struct State {
     }
 
     void Print(){
+        char board[4][8];
+        for (int i = 0; i < 4; i++) for (int j = 0; j < 8; j++) board[i][j] = '.';
         for (auto piece : pieces){
-            cout << piece.type << ' ' << piece.color << ' ' << piece.pos.fi << ' ' << piece.pos.se << ' ';
+            board[piece.pos.fi][piece.pos.se] = piece.color ? piece.type : piece.type + ('a' - 'A');
+            //cout << piece.type << ' ' << piece.color << ' ' << piece.pos.fi << ' ' << piece.pos.se << ' ';
         }
-        cout << '\n';
+        cout << "  0 1 2 3 4 5 6 7\n";
+        for (int i = 0; i < 4; i++){
+            cout << i << ' ';
+            for (int j = 0; j < 8; j++){
+                if (board[i][j] == '.'){
+                    cout << '.';
+                }
+                else if (board[i][j] > 'Z'){
+                    cout << "\033[1;34m" << board[i][j] <<  "\033[0m";
+                }
+                else{
+                    cout << "\033[1;31m" << board[i][j] <<  "\033[0m";
+                }
+                cout << ' ';
+            }
+            cout << '\n';
+        }
+        cout << (turn == 0 ? "\033[1;34mblue's" : "\033[1;31mred's") << "\033[0m  turn\n\n";
     }
 };
 
@@ -319,7 +339,6 @@ int main(){
     // return 0;
     EndgameTable table({Piece('K', 0), Piece('G', 1), Piece('M', 0), Piece('P', 1)});
     cout << "Finish building table, total state visited: " << table.cnt << '\n';
-    return 0;
     cout << "Enter Query:\n";
 
     string query_s;
@@ -341,10 +360,7 @@ int main(){
         auto v = State(pieces, turn).get_neighbors();
         cout << "neighbors:\n";
         for (auto nei : v){
-            for (auto pc : nei.pieces){
-                cout << pc.type << pc.color << pc.pos.first << pc.pos.second;
-            }
-            cout << " " << nei.turn << " nei_result:" << table.query(nei) << '\n';
+            nei.Print();
         }
         cout << "result: " << table.query(State(pieces, turn)) << '\n';
     }
